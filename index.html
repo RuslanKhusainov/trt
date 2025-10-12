@@ -300,8 +300,9 @@
                     <div class="card-back-pattern"></div>
                 </div>
                 <div class="card-face card-front">
-                    <img src="${imageUrl}" alt="${card.name}" class="card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                    <div class="card-image-error" style="display:none;">🔮</div>
+                    <img src="${imageUrl}" alt="${card.name}" class="card-image" 
+                         onerror="this.style.display='none'; this.parentElement.querySelector('.card-image-error').style.display='flex';" />
+                    <div class="card-image-error" style="display:none; width:100%; height:calc(100% - 30px); align-items:center; justify-content:center; font-size:48px;">🔮</div>
                     <div class="card-name">${card.name}</div>
                 </div>
             `;
