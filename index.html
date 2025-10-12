@@ -257,6 +257,20 @@
             { name: "Мир", en_name: "the world" }
         ];
 
+        function sanitizeFilename(filename) {
+            filename = filename.replace(/[<>:"/\\|?*,]/g, '');
+            filename = filename.replace(/\s+/g, '_');
+            if (filename.length > 200) {
+                filename = filename.substring(0, 200);
+            }
+            return filename.trim().replace(/^_+|_+$/g, '');
+        }
+
+        function getCardImagePath(card) {
+            const sanitized = sanitizeFilename(card.en_name);
+            return `images/${sanitized}.png`;
+        }
+
         let selectedCards = [];
         let availableCards = [...TAROT_CARDS];
 
@@ -279,14 +293,15 @@
             cardElement.dataset.cardName = card.name;
             cardElement.dataset.cardEnName = card.en_name;
 
-            const imageUrl = `/placeholder.svg?height=300&width=200&query=tarot card ${card.en_name} mystical vintage style`;
+            const imageUrl = getCardImagePath(card);
 
             cardElement.innerHTML = `
                 <div class="card-face card-back">
                     <div class="card-back-pattern"></div>
                 </div>
                 <div class="card-face card-front">
-                    <img src="${imageUrl}" alt="${card.name}" class="card-image" />
+                    <img src="${imageUrl}" alt="${card.name}" class="card-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                    <div class="card-image-error" style="display:none;">🔮</div>
                     <div class="card-name">${card.name}</div>
                 </div>
             `;
